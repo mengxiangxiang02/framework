@@ -5,153 +5,125 @@ package com.architecture;
  * @Date: 2018/12/11 14:54
  * @Description:
  */
-import java.security.Key;
-
-import java.security.KeyPair;
-
-import java.security.KeyPairGenerator;
-
-import java.security.interfaces.RSAPrivateKey;
-
-import java.security.interfaces.RSAPublicKey;
-
-import java.util.HashMap;
-
-import java.util.Map;
-
-import sun.misc.BASE64Decoder;
-
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.security.*;
 import sun.misc.BASE64Encoder;
+
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 
 @SuppressWarnings("unused")
 
 public class RSA {
 
-    public static final String KEY_ALGORITHM = "RSA";
+    /** 指定加密算法为RSA */
+    private static final String ALGORITHM = "RSA";
+    /** 密钥长度，用来初始化 */
+    private static final int KEYSIZE = 2048;
+    /** 指定公钥存放文件 */
+    private static String PUBLIC_KEY_FILE = "merkey.public";
+    /** 指定私钥存放文件 */
+    private static String PRIVATE_KEY_FILE = "merkey.private";
 
-    public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
-
-    private static final String PUBLIC_KEY = "RSAPublicKey";
-
-    private static final String PRIVATE_KEY = "RSAPrivateKey";
-
-
-
-    public static void main(String[] args) {
-
-        Map<String, Object> keyMap;
-
-        try {
-
-            keyMap = initKey();
-
-            String publicKey =  getPublicKey(keyMap);
-
-            System.out.println(publicKey);
-
-            String privateKey =  getPrivateKey(keyMap);
-
-            System.out.println(privateKey);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
-    public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
-
-        Key key = (Key) keyMap.get(PUBLIC_KEY);
-
-        byte[] publicKey = key.getEncoded();
-
-        return encryptBASE64(key.getEncoded());
-
-    }
-
-    public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
-
-        Key key = (Key) keyMap.get(PRIVATE_KEY);
-
-        byte[] privateKey =key.getEncoded();
-
-        return encryptBASE64(key.getEncoded());
-
-    }
-
-
-
-    public static byte[] decryptBASE64(String key) throws Exception {
-
-        return (new BASE64Decoder()).decodeBuffer(key);
-
-    }
-
-
-
-    public static String encryptBASE64(byte[] key) throws Exception {
-
-        return (new BASE64Encoder()).encodeBuffer(key);
-
-    }
-
-
-
-    public static Map<String, Object> initKey() throws Exception {
-
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
-
-        keyPairGen.initialize(2048);
-
-        KeyPair keyPair = keyPairGen.generateKeyPair();
-
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-
-        Map<String, Object> keyMap = new HashMap<String, Object>(2);
-
-        keyMap.put(PUBLIC_KEY, publicKey);
-
-        keyMap.put(PRIVATE_KEY, privateKey);
-
-        return keyMap;
-
+    public static void main(String[] args) throws Exception {
+        // 生成公私钥文件
+        generateKeyPair();
+        // 生成公私钥字符串
+        genKeyPair();
     }
 
     /**
-     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq4Ektn62LmHqm4XyVbnzSY/P7WsMEyz+
-     1SmN1V9/qA6tKpGvqcT7GEh1QBajiY76HMFLXhj9Fotduc7x6xFzLQ3neoadEIWi5CFtPx/tY2d6
-     JR/UKg6sbbI3ZjNw3HsxD/IFhR/fu3o5nJTzNFn2grpVgfj9OljA632T1EXhYlmFpyr8Knybg99y
-     4GosABxxxO8obAyMLUxw7A3YTQJ/pMxXYmqXXpQ31griPvrOLwC5xglVWmm9c6rvq+ioHrrIf87c
-     Xc+/TIhwfxR7Tqd5GME3vCEHes/IKaG+6r5fLXDx0uQ5s83+5igSMusAHPg7CpZuwrxPD33gkpDj
-     ui68BwIDAQAB
+     * 生成密钥对
+     * @throws Exception
+     */
+    private static void generateKeyPair() throws Exception {
 
-     MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCrgSS2frYuYeqbhfJVufNJj8/t
-     awwTLP7VKY3VX3+oDq0qka+pxPsYSHVAFqOJjvocwUteGP0Wi125zvHrEXMtDed6hp0QhaLkIW0/
-     H+1jZ3olH9QqDqxtsjdmM3DcezEP8gWFH9+7ejmclPM0WfaCulWB+P06WMDrfZPUReFiWYWnKvwq
-     fJuD33LgaiwAHHHE7yhsDIwtTHDsDdhNAn+kzFdiapdelDfWCuI++s4vALnGCVVaab1zqu+r6Kge
-     ush/ztxdz79MiHB/FHtOp3kYwTe8IQd6z8gpob7qvl8tcPHS5Dmzzf7mKBIy6wAc+DsKlm7CvE8P
-     feCSkOO6LrwHAgMBAAECggEAUhcBhJyIBRF3IzPs952G1roQU1q+r9sEqvE142DPkJhdyJdtFnyj
-     l07vWFq9slUOYH8g3Qxm78iLdymX3+U9VN5n4tzWBxeADWP2j5VvofngnC5s9iiJ3gPEwpVyuwX4
-     SOKWQ88q3ui09L7S3kcFWDNqREjypF/hD5bPEHbWV6Up3mjrCBj4ypUukHUw2O0uw3m0mb5p4IXv
-     18WHyoGGdA7Jwlms+BeWI0GqeqfcGf5LWagjU5KlcYkwgjuIelFAF+KrDjXn3LAU7+LUdenKC1Su
-     QhPmZuZ2vUadUVwUtzNm7fhwmXmODpy4IOOTYIelSWFm6c6A+I6hb2MVJUKDYQKBgQDsw15FgQeT
-     NmUDXX41cr+3iJJcGD6eH/wpnkhMU+NBUCT28iqPCJG9LXAFP01vyikLRkn8MOJUEeAnueCA2r4X
-     v+zAaIfvOMwYnWZrZUy5PuCJVx8zG6w2Yv0vMgsbqcF1VvPf+F6s44OrwExi7QATIFJY/y83bLIw
-     3S0NcPNdFwKBgQC5cGfsKjIY8ke48CyL0ISpUiw9c04yvjYWTtiKcl3F1oqFbDLh+S7Mmo2taObC
-     ITfGEXLW+0XnXmy1r54vp/5FMhS7Xc5SDzcLu3TA2cHF9FiFAzJ7KHY7/6TbyBBjLS3CWMU7US2p
-     UIP6nMwy4eCWsw07qVfPvNk7ymiGdhZOkQKBgFO3XO0Mi6Yk9KC0/Txe36VAuCeyNunoe1wn6H58
-     pv1gHkHnLN84c3fFyjdAw9vESrD+4Ig4rL53N6A0XEqTjeWN6mO6Ul5m4dvOQ/mzbuaNcg197b0/
-     iqwMYmO+uSjF5G7eGQtXofpV1Cf1rczI6l7Y7eUkDgj1+SfH/PckuhhvAoGBAKdZke/HhL6Op7t2
-     xDzJSW+lANfUH1Yb4qPvM+x9mbLZEtml86WLQ3jSYdmFOfsoDzVoucLZsRREWsb8Xj2T1hyMPbl5
-     xqC3qm2kFpGT8xO6l8gyQnRy54DuDNFrk55tP0aM5jHJ6PNL/k9FAeNJhW162Q5mnSCUxVb4K6xt
-     FWSBAoGATNmLqgQuwqAPfU9+EJzVZwPD04nNBzMy9/iVTN0nKitqlQyeGmYqsFPTtutQMum+W7NZ
-     wh5NL4A5vZWEqHeZNe8xCB1Fi0kctxOPfbbEMQNvBxzrK8D3cPyIFSEs8mleajExpYYoXHsLdWZr
-     c/UVTxkJnair7SnbcAyaNvt05mc=
+        //     /** RSA算法要求有一个可信任的随机数源 */
+        //     SecureRandom secureRandom = new SecureRandom();
+        /** 为RSA算法创建一个KeyPairGenerator对象 */
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
 
+        /** 利用上面的随机数据源初始化这个KeyPairGenerator对象 */
+        //     keyPairGenerator.initialize(KEYSIZE, secureRandom);
+        keyPairGenerator.initialize(KEYSIZE);
+
+        /** 生成密匙对 */
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        /** 得到公钥 */
+        Key publicKey = keyPair.getPublic();
+
+        /** 得到私钥 */
+        Key privateKey = keyPair.getPrivate();
+
+        ObjectOutputStream oos1 = null;
+        ObjectOutputStream oos2 = null;
+        try {
+            /** 用对象流将生成的密钥写入文件 */
+            oos1 = new ObjectOutputStream(new FileOutputStream(PUBLIC_KEY_FILE));
+            oos2 = new ObjectOutputStream(new FileOutputStream(PRIVATE_KEY_FILE));
+            oos1.writeObject(publicKey);
+            oos2.writeObject(privateKey);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            /** 清空缓存，关闭文件输出流 */
+            if(oos1 != null){
+                oos1.close();
+            }
+            if(oos2 != null){
+                oos2.close();
+            }
+        }
+    }
+
+    private static void genKeyPair() throws NoSuchAlgorithmException {
+
+        /** RSA算法要求有一个可信任的随机数源 */
+        SecureRandom secureRandom = new SecureRandom();
+
+        /** 为RSA算法创建一个KeyPairGenerator对象 */
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
+
+        /** 利用上面的随机数据源初始化这个KeyPairGenerator对象 */
+        keyPairGenerator.initialize(KEYSIZE, secureRandom);
+        //keyPairGenerator.initialize(KEYSIZE);
+
+        /** 生成密匙对 */
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+        /** 得到公钥 */
+        Key publicKey = keyPair.getPublic();
+
+        /** 得到私钥 */
+        Key privateKey = keyPair.getPrivate();
+
+        byte[] publicKeyBytes = publicKey.getEncoded();
+        byte[] privateKeyBytes = privateKey.getEncoded();
+
+        String publicKeyBase64 = new BASE64Encoder().encode(publicKeyBytes);
+        String privateKeyBase64 = new BASE64Encoder().encode(privateKeyBytes);
+
+        System.out.println("publicKeyBase64.length():" + publicKeyBase64.length());
+        System.out.println("publicKeyBase64:" + publicKeyBase64);
+
+        System.out.println("privateKeyBase64.length():" + privateKeyBase64.length());
+        System.out.println("privateKeyBase64:" + privateKeyBase64);
+    }
+
+
+    /**
+     * MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCjNqLxvyWQCZ76BLOL99P628nh27EWc10dyi47AeUoquGVJItaXu1nJDC+e+1YPDh/Vu8Qa+0hdxsI3sTya4alKMqIjVjKaTdIwjvbBr+4j6+/xmeB+uSXaPUlJLprl4JCMfQwvXzTiDLqnwUgFRvMYZUA+xNGIrdZhr59Q5G0G1khAYJyaikHUA0pkEjwEkbDDsQCAMoqpjAdiApK/LwGS/M4DTVdQE7NHwEwJN8Wq7mu2LEeRDHr0sxdvckyhz7xAP4EXYjZPaAYKnJqL4fs/0T1GsXX4xkKRmcCcItr0uWkylMER+ZXs2Dln8FrunTY8a9pnSezr+n1D4OzQDebAgMBAAECggEBAIWR9zQknJcOaJ5wLohD36WTLdq7MmgPLYttpPwBhwsLHeYyrCDfQyZ/xax+OzVUw1/jQ26LBNu4X9WYilFikiSkB2xNUPcFuIrA+r86/LgMT2aA9sC3FVCcQtONBUt8CMwnmZIx4PA0rIa6cTVaUQ+oZIsS7ykczDRmQ4q8O4fK8rMIp5ctB+uW9+Ux8essXcUCkAk8U4tGOqN7FNDOI/ymOjDkDAZ3Em2y0Jy4SStggOMEf0w89097PZQ+N0BUIG4J1qDD5I32yFy188nh2+TmFe2dr/4kCwmyMg5p2SCE3JRUe+XNsW+xkkB6U/81S/x0QL58TR138GlzWS3VjAECgYEA2OohdTrFYcDjbMVyH4Q9zmfsYJpVB1+XxaEfyyQZ/vKs6L+5MLdhS+nKdXhciDiT0e164v69w3qgJ6H37DthEZeobfeVyzN8Z+p5/RS04sVslhWtuQcV6ri4iCf1hSIAYWZcTT/cW5nOXogLfog0LIPFpfj5DQEmaLZHjSsvbwECgYEAwJ9e7U4mjbVp3sFp1rBLOFyB5JNJJSZAiKmvpCQ6L/iCUmx/1K0I+0kbERSOwdzffuIc3tql7SpmlEdAz5Q+fNbbnnsaXcQsDJpBrCiOceqmOs/KiabiT4CZ93rMtDLwr9N4IX9f3uAOOGpx03B1TcGRWrZygRTR0VmlLHiqApsCgYAC5/AWz/jA/IKPfH2w6mahk0bZbHfjJ2azIRt57zvh7IJgg+EJRAurprAtrrUephNk5peU3vDP456tqT/XDFyajbuV7ZE2LbRm9/82Ysahmx9/Sz8OkYe7o0nlmRNy+yeiJmrqJgbfu0nGfnAY+94nEoTdWl6LzA4lrPt8aq2yAQKBgH1PcMb6v3QTIBPNSdhkChtZextDgiNL1lHR6jTjaINKrSWH9kVaaGxpa9VZxWFzGmaGHPgR0D4RBnjSPeSM8XXvpSJdvZJgi7OLKswf+kM7vvaltYKFcdb8t61bUw6r0Q7hiNZp8emhYz7qaLCACaATHEeiR62X6MPECQN8YEWfAoGBANUZsd6Ose/VVQBMpPNrOKFZB6QGjOREPCGE2RlqtlXx4yehNDdIlI0yRTqMZeirpxTU4nCbXaN3Sxtg8yQIQsY2EA1OKeWNA8SPCqehVGIJqVb7m1i82ClBAZu0NI7f524Vq0nQaLrC/zp7GUGajZ1myfgA//nDaZCkXUuXwnrJ
      */
 
+    /**
+     * MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAozai8b8lkAme+gSzi/fT+tvJ4duxFnNd
+     HcouOwHlKKrhlSSLWl7tZyQwvnvtWDw4f1bvEGvtIXcbCN7E8muGpSjKiI1Yymk3SMI72wa/uI+v
+     v8Zngfrkl2j1JSS6a5eCQjH0ML1804gy6p8FIBUbzGGVAPsTRiK3WYa+fUORtBtZIQGCcmopB1AN
+     KZBI8BJGww7EAgDKKqYwHYgKSvy8BkvzOA01XUBOzR8BMCTfFqu5rtixHkQx69LMXb3JMoc+8QD+
+     BF2I2T2gGCpyai+H7P9E9RrF1+MZCkZnAnCLa9LlpMpTBEfmV7Ng5Z/Ba7p02PGvaZ0ns6/p9Q+D
+     s0A3mwIDAQAB
+     */
 }
