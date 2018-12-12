@@ -20,7 +20,7 @@ public class BaseZookeeper implements Watcher {
 
     public static void main(String[] args) throws Exception {
         BaseZookeeper zookeeper = new BaseZookeeper();
-        zookeeper.connectZookeeper("10.132.97.66:2181,10.132.97.73:2181");
+        zookeeper.connectZookeeper("ip:port");
 
         List<String> children = zookeeper.getChildren("/");
         System.out.println(children);
