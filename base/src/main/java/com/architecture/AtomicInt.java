@@ -2,6 +2,9 @@ package com.architecture;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * 线程安全的int类型
+ */
 public class AtomicInt {
     public final static int STAT_INIT = 0;
 

@@ -3,6 +3,9 @@ package com.architecture;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ *  classLoader.loadClass类加载
+ */
 public class ClassLoaderTest {
     public static void  main(String args[]) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         ClassLoader classLoader=new ClassLoader() {
