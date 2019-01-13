@@ -1,4 +1,4 @@
-package com.architecture;
+package com.architecture.gc;
 
 public class Finalize {
     public static  Finalize finalize=null;

@@ -1,11 +1,10 @@
-package com.architecture;
+package com.architecture.classloader;
+
+import com.architecture.gc.Finalize;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- *  classLoader.loadClass类加载
- */
 public class ClassLoaderTest {
     public static void  main(String args[]) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         ClassLoader classLoader=new ClassLoader() {
@@ -29,8 +28,8 @@ public class ClassLoaderTest {
             }
         };
 
-        Object aClass = classLoader.loadClass("com.architecture.Finalize").newInstance();
+        Object aClass = classLoader.loadClass("com.architecture.gc.Finalize").newInstance();
         System.out.println(aClass.getClass());
-        System.out.println(aClass instanceof com.architecture.Finalize);
+        System.out.println(aClass instanceof Finalize);
     }
 }
