@@ -1,4 +1,4 @@
-package com.architecture.nio;
+package io.nio;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
