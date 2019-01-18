@@ -201,7 +201,7 @@ public class BinaryTree {
             successor.rightNode=delnode.rightNode;//将要删除的右节点付给替代者的右节点
         }
         return  successor;
-
-
     }
+
+
 }

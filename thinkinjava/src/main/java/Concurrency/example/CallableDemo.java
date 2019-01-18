@@ -2,15 +2,12 @@ package Concurrency.example;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @author : mengxiangxiang
  * @Date :   2018/10/17
- * @description :
+ * @description :callable Future用来处理并行任务执行结束后统一执行下一个任务的问题
  */
 class TaskWithResult implements Callable<String>
 {
@@ -35,8 +32,7 @@ class TaskWithResult implements Callable<String>
 public class CallableDemo
 {
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) throws InterruptedException, ExecutionException {
         ExecutorService exec= Executors.newCachedThreadPool();
         ArrayList<Future<String>> result=new ArrayList<Future<String>>();
         for(int i=0;i<10;i++)
@@ -49,10 +45,9 @@ public class CallableDemo
         {
             try
             {
-                //if(future.isDone())
                 {
                     String s = future.get();//get会阻塞 直到获取到该任务的结果
-                    System.out.println(s);
+                    //System.out.println(s);
                 }
             }catch (InterruptedException e)
             {
@@ -65,6 +60,23 @@ public class CallableDemo
             }
         }
         System.out.println(" get result end");
+
+
+
+        //获取Callable的结果的另一种方式：ExecutorService
+        ExecutorService executor= Executors.newCachedThreadPool();
+        CompletionService<String> completionService =new ExecutorCompletionService<String>(executor);
+        for(int i=0;i<10;i++)
+        {
+            completionService.submit(new TaskWithResult(i));
+        }
+        for(int i=0;i<10;i++)
+        {
+            Future<String> future=completionService.take();
+            String resultFuture = future.get();
+            System.out.println("resultFuture:"+resultFuture);
+        }
+        executor.shutdown();
     }
 
 }

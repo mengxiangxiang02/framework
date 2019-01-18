@@ -1,5 +1,6 @@
 package Concurrency;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -42,7 +43,7 @@ public class ThreadLocalVariable {
 
     private static ThreadLocal<Map<String,String>> localMap=new ThreadLocal<Map<String,String>>(){
         protected synchronized Map<String,String> initialValue(){
-            return new HashMap<>();
+            return Collections.synchronizedMap(new HashMap<String, String>());
         }
     };
     public static Map<String,String> localMapGet()
