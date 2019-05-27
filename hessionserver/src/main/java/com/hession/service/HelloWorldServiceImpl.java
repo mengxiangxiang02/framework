@@ -1,6 +1,7 @@
 package com.hession.service;
 
-import com.hession.demo.Person;
+import com.hession.hessionapi.HelloWorldService;
+import com.hession.hessionapi.bean.Person;
 import org.springframework.stereotype.Service;
 
 /**

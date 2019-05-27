@@ -21,13 +21,18 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.hession</groupId>
+			<artifactId>hessionapi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.hession</groupId>
-			<artifactId>demo</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.caucho</groupId>
+			<artifactId>hessian</artifactId>
+			<version>4.0.38</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,6 +1,6 @@
 package com.hession.hessianclient;
 
-import com.hession.service.HelloWorldService;
+import com.hession.hessionapi.HelloWorldService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

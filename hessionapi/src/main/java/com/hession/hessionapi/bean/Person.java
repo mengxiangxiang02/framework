@@ -1,4 +1,4 @@
-package com.hession.demo;
+package com.hession.hessionapi.bean;
 
 import java.io.Serializable;
 

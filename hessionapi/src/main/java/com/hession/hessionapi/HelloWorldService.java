@@ -1,6 +1,7 @@
-package com.hession.service;
+package com.hession.hessionapi;
 
-import com.hession.demo.Person;
+
+import com.hession.hessionapi.bean.Person;
 
 /**
  * @Auther: mengxiangxiang
