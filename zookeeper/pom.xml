@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <version.zookeeper>3.4.3</version.zookeeper>
+        <version.zookeeper>3.8.0</version.zookeeper>
 
     </properties>
 
@@ -28,16 +28,20 @@
             <artifactId>zookeeper</artifactId>
             <version>${version.zookeeper}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-framework -->
         <dependency>
-            <groupId>com.netflix.curator</groupId>
-            <artifactId>curator-recipes</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.netflix.curator</groupId>
+            <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
-            <version>1.2.3</version>
+            <version>5.3.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.curator/curator-recipes -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
