@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f6fa;
+        }
+        .navbar {
+            background: #fff;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .navbar h2 { font-size: 18px; color: #333; }
+        .navbar .user-info { font-size: 14px; color: #666; }
+        .navbar a {
+            color: #667eea;
+            text-decoration: none;
+            margin-left: 16px;
+        }
+        .content {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            padding: 30px;
+        }
+        .card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fc;
+            color: #666;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        td { color: #333; font-size: 14px; }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        .badge-admin { background: #e8f5e9; color: #2e7d32; }
+        .badge-user { background: #e3f2fd; color: #1565c0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h2>系统管理</h2>
+        <div class="user-info">
+            欢迎, <span data-testid="welcome-user">{{ username }}</span>
+            <a href="/logout" data-testid="logout-link">退出登录</a>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="card">
+            <h3 data-testid="page-title">用户管理</h3>
+            <table data-testid="user-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>角色</th>
+                        <th>状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>admin</td>
+                        <td><span class="badge badge-admin">管理员</span></td>
+                        <td>正常</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>user</td>
+                        <td><span class="badge badge-user">普通用户</span></td>
+                        <td>正常</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
